@@ -4,12 +4,12 @@ from googlesearch import search
 token='5563353920:AAE_YN6nQ-qNP4jnkA25xCjv-JFiBGnNbqM'
 print("Démarrage du Bot...")
 class Key :
-   query = input("Saisir votre recherche Google:")
+   query = input("Saisir votre recherche Bing:")
 
 Mot=Key.query
 def Rech(Mot):
     for j in search(Mot, tld="co.in", num=10, stop=10, pause=2): 
-        return j 
+        return j
 
 async def start(update: Update , context:ContextTypes.DEFAULT_TYPE ) -> None :
     user = update.effective_user
