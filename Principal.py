@@ -6,7 +6,7 @@ print("Démarrage du Bot...")
 class Key :
    query = input("Saisir votre recherche Google:")
 
-Mot=Key.query
+Mot=Key()
 def Rech(Mot):
     for j in search(Mot, tld="co.in", num=10, stop=10, pause=2): 
         return j 
