@@ -1,34 +1,32 @@
-import Telebot as keys
-from telegram.ext import *
-import Telebot1 as Reponses
-
+from telegram import Update ,ForceReply
+from telegram.ext import Application , MessageHandler, CommandHandler , ContextTypes , ApplicationBuilder , filters
+from googlesearch import search 
+token='5563353920:AAE_YN6nQ-qNP4jnkA25xCjv-JFiBGnNbqM'
 print("Démarrage du Bot...")
+class Key :
+   query = input("Saisir votre recherche Google:")
 
+Mot=Key.query
+def Rech(Mot):
+    for j in search(Mot, tld="co.in", num=10, stop=10, pause=2): 
+        return j 
 
-def Demar_com(maj,cont):
-    maj.message.reply_text("Veuillez taper au hasard quelque chose")
-def Aide_com(maj,cont):
-    maj.message.reply_text("Pour toute aide de notre part , veuillez consulter Google !")
-def Rep_com(maj,cont):
-    text= str(maj.message.text).lower()
-    rep=Reponses.rep_simp()
-    maj.message.reply_text(rep)
+async def start(update: Update , context:ContextTypes.DEFAULT_TYPE ) -> None :
+    user = update.effective_user
+    await update.message.reply_html(
+        {user.mention_html()},
+        reply_markup=ForceReply(selective=True),
+    )
+
+async def research(update: Update , context:ContextTypes.DEFAULT_TYPE ):
+       await context.bot.send_message(chat_id=update.effective_chat.id, text=Rech(Mot))
+
+if __name__ == '__main__' :
+    application = ApplicationBuilder().token(token).build()
     
-def Erreur(maj,cont):
-    print(f"Mise_à niv {maj} caused error {cont.Erreur}")
-    
-def Principal():
-    mniver= Updater(keys.API_KEY , use_context=True)
-    dis=mniver.dispatcher
-    
-    dis.add_handler(CommandHandler("Start",Demar_com))
-    dis.add_handler(CommandHandler("Start",Aide_com))
-    
-    dis.add_handler(MessageHandler(Filters.text, Rep_com))
-    
-    dis.add_error_handler(Erreur)
-    
-    mniver.start_polling(23)
-    mniver.idle
-    
-    Principal()
+    start_handler = CommandHandler('start',start )
+    search_handler=MessageHandler(filters.TEXT & (~filters.COMMAND), research )
+    application.add_handler(start_handler)
+    application.add_handler(search_handler)
+    application.run_polling()
+ 
